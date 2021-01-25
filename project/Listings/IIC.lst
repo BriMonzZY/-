@@ -1,0 +1,155 @@
+C51 COMPILER V9.60.0.0   IIC                                                               01/25/2021 22:55:07 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE IIC
+OBJECT MODULE PLACED IN ..\output\IIC.obj
+COMPILER INVOKED BY: D:\app\keil\C51\BIN\C51.EXE ..\files\IIC.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(
+                    -.\Listings\IIC.lst) TABS(2) OBJECT(..\output\IIC.obj)
+
+line level    source
+
+   1          #include "config.h"
+   2          #include "IIC.h"
+   3          
+   4          
+   5          
+   6          void nop()
+   7          {
+   8   1        _nop_();
+   9   1        _nop_();
+  10   1      }
+  11          /////////24C02¶ÁÐ´Çý¶¯³ÌÐò////////////////////
+  12          void delay1(unsigned int m)
+  13          { unsigned int n;
+  14   1          for(n=0;n<m;n++);
+  15   1      }
+  16          
+  17          void init()  //24c02³õÊ¼»¯×Ó³ÌÐò
+  18          {
+  19   1        scl=1;
+  20   1        nop();
+  21   1        sda=1;
+  22   1        nop();
+  23   1      }
+  24          
+  25          void start()        //Æô¶¯I2C×ÜÏß
+  26          {
+  27   1        sda=1;
+  28   1        nop();
+  29   1        scl=1;
+  30   1        nop();
+  31   1        sda=0;
+  32   1        nop();
+  33   1        scl=0;
+  34   1        nop();
+  35   1      }
+  36          
+  37          void stop()         //Í£Ö¹I2C×ÜÏß
+  38          {
+  39   1        sda=0;
+  40   1        nop();
+  41   1        scl=1;
+  42   1        nop();
+  43   1        sda=1;
+  44   1        nop();
+  45   1      }
+  46          
+  47          void writebyte(unsigned char j)  //Ð´Ò»¸ö×Ö½Ú
+  48          {
+  49   1        unsigned char i,temp;
+  50   1          temp=j;
+  51   1          for (i=0;i<8;i++)
+  52   1         {
+  53   2           temp=temp<<1;
+  54   2           scl=0;
+C51 COMPILER V9.60.0.0   IIC                                                               01/25/2021 22:55:07 PAGE 2   
+
+  55   2           nop();
+  56   2           sda=CY;    //temp×óÒÆÊ±£¬ÒÆ³öµÄÖµ·ÅÈëÁËCYÖÐ
+  57   2           nop();
+  58   2           scl=1;   //´ýsdaÏßÉÏµÄÊý¾ÝÎÈ¶¨ºó£¬½«sclÀ­¸ß
+  59   2           nop();
+  60   2         }
+  61   1         scl=0;
+  62   1         nop();
+  63   1         sda=1;
+  64   1         nop();
+  65   1      }
+  66          
+  67          unsigned char readbyte()   //¶ÁÒ»¸ö×Ö½Ú
+  68          {
+  69   1         unsigned char i,j,k=0;
+  70   1         scl=0; nop(); sda=1;
+  71   1         for (i=0;i<8;i++)
+  72   1         {  
+  73   2          nop(); scl=1; nop();
+  74   2              if(sda==1) 
+  75   2          j=1;
+  76   2              else
+  77   2          j=0;
+  78   2              k=(k<<1)|j;
+  79   2            scl=0;
+  80   2        }
+  81   1          nop();
+  82   1        return(k);
+  83   1      }
+  84          
+  85          void clock()         //I2C×ÜÏßÊ±ÖÓ
+  86          {
+  87   1         unsigned char i=0;
+  88   1         scl=1;
+  89   1         nop();
+  90   1         while((sda==1)&&(i<255))
+  91   1            i++;
+  92   1         scl=0;
+  93   1         nop();
+  94   1      }
+  95          
+  96          ////////´Ó24c02µÄµØÖ·addressÖÐ¶ÁÈ¡Ò»¸ö×Ö½ÚÊý¾Ý/////
+  97          unsigned char read24c02(unsigned char address)
+  98          {
+  99   1         unsigned char i;
+ 100   1         start();
+ 101   1         writebyte(0xa0);
+ 102   1         clock();
+ 103   1         writebyte(address);
+ 104   1         clock();
+ 105   1         start();
+ 106   1         writebyte(0xa1);
+ 107   1         clock();
+ 108   1         i=readbyte();
+ 109   1         stop();
+ 110   1         delay1(100);
+ 111   1         return(i);
+ 112   1      }
+ 113          
+ 114          //////Ïò24c02µÄaddressµØÖ·ÖÐÐ´ÈëÒ»×Ö½ÚÊý¾Ýinfo/////
+ 115          void write24c02(unsigned char address,unsigned char info)
+ 116          {
+C51 COMPILER V9.60.0.0   IIC                                                               01/25/2021 22:55:07 PAGE 3   
+
+ 117   1         start();
+ 118   1         writebyte(0xa0);
+ 119   1         clock();
+ 120   1         writebyte(address);
+ 121   1         clock();
+ 122   1         writebyte(info);
+ 123   1         clock();
+ 124   1         stop();
+ 125   1         delay1(5000); //Õâ¸öÑÓÊ±Ò»¶¨Òª×ã¹»³¤£¬·ñÔò»á³ö´í¡£ÒòÎª24c02ÔÚ´ÓsdaÉÏÈ¡µÃÊý¾Ýºó£¬»¹ÐèÒªÒ»¶¨Ê±¼äµÄÉÕÂ¼¹ý³
+             -Ì¡£
+ 126   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    254    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
