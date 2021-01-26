@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   KEY                                                               01/25/2021 22:55:07 PAGE 1   
+C51 COMPILER V9.60.0.0   KEY                                                               01/26/2021 10:23:03 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE KEY
@@ -11,95 +11,91 @@ line level    source
    1          #include "config.h"
    2          #include "key.h"
    3          #include "smg.h"
-   4          
-   5          
-   6          uchar KeySta[4][4] = { //È«²¿¾ØÕó°´¼üµÄµ±Ç°×´Ì¬
-   7              {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}
-   8          };
-   9          uchar keyvalue = 0;
-  10          
+   4          #include "main.h"
+   5          #include "app.h"
+   6          
+   7          uchar KeySta[4][4] = { //È«²¿¾ØÕó°´¼üµÄµ±Ç°×´Ì¬
+   8              {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}
+   9          };
+  10          uchar keyvalue = 0;
   11          
-  12          /*¶¨Ê±Æ÷ÖÐ¶Ï0³õÊ¼»¯º¯Êý*/
-  13          void timer0Init()
-  14          {
-  15   1          EA = 1;
-  16   1          TMOD = 0x01; //ÉèÖÃ T0 ÎªÄ£Ê½ 1
-  17   1          TH0 = 0xfc; //Îª T0 ¸³³õÖµ 0xFC67£¬¶¨Ê± 1ms
-  18   1          TL0 = 0x66;
-  19   1          ET0 = 1; //Ê¹ÄÜ T0 ÖÐ¶Ï
-  20   1          TR0 = 1; //Æô¶¯ T0
-  21   1      }
-  22          
-  23          uchar keydriver() {
-  24   1        
-  25   1        uchar backup[4][4];
-  26   1        uchar i, j, gg;
-  27   1        
-  28   1        
-  29   1        for (i=0; i<4; i++){
-  30   2          for (j=0; j<4; j++){
-  31   3              if (backup[i][j] != KeySta[i][j]){//¼ì²â°´¼ü¶¯×÷
-  32   4                if (backup[i][j] != 0){ //
-  33   5                  keyvalue = i * 4 + j;
-  34   5                  
-  35   5                }//if (backup[i][j] != 0) °´¼ü°´ÏÂÊ±Ö´ÐÐ¶¯×÷
-  36   4                backup[i][j] = KeySta[i][j]; //¸üÐÂÇ°Ò»´ÎµÄ±¸·ÝÖµ
-  37   4              }
-  38   3          }
-  39   2        }
-  40   1        return keyvalue;
-  41   1      }
-*** WARNING C280 IN LINE 26 OF ..\files\key.c: 'gg': unreferenced local variable
-  42          
-  43          
-  44          void keyscan() {
-  45   1         uchar m;
-  46   1          static uchar keyout = 0; //¾ØÕó°´¼üÉ¨ÃèÊä³öË÷Òý
-  47   1          
-  48   1          static uchar keybuf[4][4] = { //¾ØÕó°´¼üÉ¨Ãè»º³åÇø
-  49   1              {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF},
-  50   1              {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}
-  51   1          };
-  52   1        
-  53   1        
-C51 COMPILER V9.60.0.0   KEY                                                               01/25/2021 22:55:07 PAGE 2   
+  12          
+  13          /*¶¨Ê±Æ÷ÖÐ¶Ï0³õÊ¼»¯º¯Êý*/
+  14          void timer0Init()
+  15          {
+  16   1          EA = 1;
+  17   1          TMOD = 0x01; //ÉèÖÃ T0 ÎªÄ£Ê½ 1
+  18   1          TH0 = 0xfc; //Îª T0 ¸³³õÖµ 0xFC67£¬¶¨Ê± 1ms
+  19   1          TL0 = 0x66;
+  20   1          ET0 = 1; //Ê¹ÄÜ T0 ÖÐ¶Ï
+  21   1          TR0 = 1; //Æô¶¯ T0
+  22   1      }
+  23          
+  24          void keydriver() { 
+  25   1        uchar i, j, gg;//Ñ­»·±äÁ¿
+  26   1        for (i=0; i<4; i++){
+  27   2          for (j=0; j<4; j++){
+  28   3              if (backup[i][j] != KeySta[i][j]){//¼ì²â°´¼ü¶¯×÷
+  29   4                if (backup[i][j] != 0){ //
+  30   5                  keyvalue = i * 4 + j;
+  31   5                  KeyAction(keyvalue);
+  32   5                }//if (backup[i][j] != 0) °´¼ü°´ÏÂÊ±Ö´ÐÐ¶¯×÷
+  33   4                backup[i][j] = KeySta[i][j]; //¸üÐÂÇ°Ò»´ÎµÄ±¸·ÝÖµ
+  34   4              }
+  35   3          }
+  36   2        }
+  37   1      }
+*** WARNING C280 IN LINE 25 OF ..\files\key.c: 'gg': unreferenced local variable
+  38          
+  39          
+  40          void keyscan() { //ÔÚÖÐ¶ÏÖÐµ÷ÓÃ
+  41   1         uchar m;
+  42   1          static uchar keyout = 0; //¾ØÕó°´¼üÉ¨ÃèÊä³öË÷Òý
+  43   1          
+  44   1          static uchar keybuf[4][4] = { //¾ØÕó°´¼üÉ¨Ãè»º³åÇø
+  45   1              {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF},
+  46   1              {0xFF, 0xFF, 0xFF, 0xFF}, {0xFF, 0xFF, 0xFF, 0xFF}
+  47   1          };
+  48   1        
+  49   1        
+  50   1        /*Ïû¶¶²¢¸üÐÂ°´¼ü×´Ì¬*/
+  51   1        //½«Ò»ÐÐµÄ 4 ¸ö°´¼üÖµÒÆÈë»º³åÇø
+  52   1        keybuf[keyout][0] = (keybuf[keyout][0] << 1) | KEY_IN_1;
+  53   1        keybuf[keyout][1] = (keybuf[keyout][1] << 1) | KEY_IN_2;
+C51 COMPILER V9.60.0.0   KEY                                                               01/26/2021 10:23:03 PAGE 2   
 
-  54   1        /*Ïû¶¶²¢¸üÐÂ°´¼ü×´Ì¬*/
-  55   1        //½«Ò»ÐÐµÄ 4 ¸ö°´¼üÖµÒÆÈë»º³åÇø
-  56   1        keybuf[keyout][0] = (keybuf[keyout][0] << 1) | KEY_IN_1;
-  57   1        keybuf[keyout][1] = (keybuf[keyout][1] << 1) | KEY_IN_2;
-  58   1        keybuf[keyout][2] = (keybuf[keyout][2] << 1) | KEY_IN_3;
-  59   1        keybuf[keyout][3] = (keybuf[keyout][3] << 1) | KEY_IN_4;
-  60   1        //Ïû¶¶ºó¸üÐÂ°´¼ü×´Ì¬
-  61   1        for (m = 0; m < 4; m++){ //Ã¿ÐÐ 4 ¸ö°´¼ü£¬ËùÒÔÑ­»· 4 ´Î
-  62   2            if ((keybuf[keyout][m] & 0x0F) == 0x00){    //Á¬Ðø 4 ´ÎÉ¨ÃèÖµÎª 0£¬¼´ 4*4ms ÄÚ¶¼ÊÇ°´ÏÂ×´Ì¬Ê±£¬¿ÉÈÏÎª°´¼
+  54   1        keybuf[keyout][2] = (keybuf[keyout][2] << 1) | KEY_IN_3;
+  55   1        keybuf[keyout][3] = (keybuf[keyout][3] << 1) | KEY_IN_4;
+  56   1        //Ïû¶¶ºó¸üÐÂ°´¼ü×´Ì¬
+  57   1        for (m = 0; m < 4; m++){ //Ã¿ÐÐ 4 ¸ö°´¼ü£¬ËùÒÔÑ­»· 4 ´Î
+  58   2            if ((keybuf[keyout][m] & 0x0F) == 0x00){    //Á¬Ðø 4 ´ÎÉ¨ÃèÖµÎª 0£¬¼´ 4*4ms ÄÚ¶¼ÊÇ°´ÏÂ×´Ì¬Ê±£¬¿ÉÈÏÎª°´¼
              -üÒÑÎÈ¶¨µÄ°´ÏÂ
-  63   3                KeySta[keyout][m] = 0;
-  64   3            }
-  65   2            else if ((keybuf[keyout][m] & 0x0F) == 0x0F){    //Á¬Ðø 4 ´ÎÉ¨ÃèÖµÎª 1£¬¼´ 4*4ms ÄÚ¶¼ÊÇµ¯Æð×´Ì¬Ê±£¬¿ÉÈÏ
+  59   3                KeySta[keyout][m] = 0;
+  60   3            }
+  61   2            else if ((keybuf[keyout][m] & 0x0F) == 0x0F){    //Á¬Ðø 4 ´ÎÉ¨ÃèÖµÎª 1£¬¼´ 4*4ms ÄÚ¶¼ÊÇµ¯Æð×´Ì¬Ê±£¬¿ÉÈÏ
              -Îª°´¼üÒÑÎÈ¶¨µÄµ¯Æð
-  66   3                KeySta[keyout][m] = 1;
-  67   3            }
-  68   2        }
-  69   1        
-  70   1        /*½øÐÐ¾ØÕó°´¼üÉ¨Ãè*/
-  71   1        //Ö´ÐÐÏÂÒ»´ÎµÄÉ¨ÃèÊä³ö
-  72   1        keyout++; //Êä³öË÷ÒýµÝÔö
-  73   1        keyout = keyout & 0x03; //Ë÷ÒýÖµ¼Óµ½ 4 ¼´¹éÁã
-  74   1        switch (keyout){ //¸ù¾ÝË÷Òý£¬ÊÍ·Åµ±Ç°Êä³öÒý½Å£¬À­µÍÏÂ´ÎµÄÊä³öÒý½Å
-  75   2            case 0: KEY_OUT_4 = 1; KEY_OUT_1 = 0; break;
-  76   2            case 1: KEY_OUT_1 = 1; KEY_OUT_2 = 0; break;
-  77   2            case 2: KEY_OUT_2 = 1; KEY_OUT_3 = 0; break;
-  78   2            case 3: KEY_OUT_3 = 1; KEY_OUT_4 = 0; break;
-  79   2            default: break;
-  80   2        }
-  81   1      }
+  62   3                KeySta[keyout][m] = 1;
+  63   3            }
+  64   2        }
+  65   1        
+  66   1        /*½øÐÐ¾ØÕó°´¼üÉ¨Ãè*/
+  67   1        //Ö´ÐÐÏÂÒ»´ÎµÄÉ¨ÃèÊä³ö
+  68   1        keyout++; //Êä³öË÷ÒýµÝÔö
+  69   1        keyout = keyout & 0x03; //Ë÷ÒýÖµ¼Óµ½ 4 ¼´¹éÁã
+  70   1        switch (keyout){ //¸ù¾ÝË÷Òý£¬ÊÍ·Åµ±Ç°Êä³öÒý½Å£¬À­µÍÏÂ´ÎµÄÊä³öÒý½Å
+  71   2            case 0: KEY_OUT_4 = 1; KEY_OUT_1 = 0; break;
+  72   2            case 1: KEY_OUT_1 = 1; KEY_OUT_2 = 0; break;
+  73   2            case 2: KEY_OUT_2 = 1; KEY_OUT_3 = 0; break;
+  74   2            case 3: KEY_OUT_3 = 1; KEY_OUT_4 = 0; break;
+  75   2            default: break;
+  76   2        }
+  77   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    511    ----
+   CODE SIZE        =    554    ----
    CONSTANT SIZE    =   ----    ----
-   XDATA SIZE       =     34      17
+   XDATA SIZE       =     34       3
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

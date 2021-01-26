@@ -2,8 +2,7 @@
 #define _KEY_H
 
 void timer0Init();
-uchar keydriver();
+void keydriver();
 void keyscan();
-extern uchar backup[4][4];
 
 #endif

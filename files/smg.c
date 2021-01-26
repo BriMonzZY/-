@@ -1,5 +1,6 @@
 #include "config.h"
 #include "smg.h"
+#include "main.h"
 																																									//10    11   12    13     14     15
 																																									//O     P     e     n     Ï¨Ãð   -
 uchar code SMGduan[]= {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F, 0x3f, 0x73, 0x7b, 0x37, 0x00, 0x40};

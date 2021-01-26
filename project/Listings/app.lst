@@ -1,0 +1,336 @@
+C51 COMPILER V9.60.0.0   APP                                                               01/26/2021 10:23:04 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE APP
+OBJECT MODULE PLACED IN ..\output\app.obj
+COMPILER INVOKED BY: D:\app\keil\C51\BIN\C51.EXE ..\files\app.c LARGE OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(
+                    -.\Listings\app.lst) TABS(2) OBJECT(..\output\app.obj)
+
+line level    source
+
+   1          #include "config.h"
+   2          #include "main.h"
+   3          #include "app.h"
+   4          #include "IIC.h"
+   5          
+   6          uchar gg;
+   7          
+   8          void key_0(uchar keyvalue) {
+   9   1        /*输入密码*/
+  10   1        if(staSystem ==KEYIN) {
+  11   2          for(gg = 3; gg <= 7; gg++) {//执行5次
+  12   3            key[gg - 1] = key[gg];
+  13   3          }
+  14   2          key[7] = keyvalue;
+  15   2        }
+  16   1        /*修改密码*/
+  17   1        if(staSystem == SET_KEY) {
+  18   2          if(staSystem ==KEYIN) {
+  19   3            if(addr == 116) addr = 110;
+  20   3            else {
+  21   4              write24c02(addr, keyvalue);
+  22   4              addr++;
+  23   4            }
+  24   3            for(gg = 3; gg <= 7; gg++) {//执行5次
+  25   4              key[gg - 1] = key[gg];
+  26   4            }
+  27   3            key[7] = read24c02(addr - 1);
+  28   3          }
+  29   2        }
+  30   1      }
+  31          
+  32          void key_1(uchar keyvalue) {
+  33   1        /*输入密码*/
+  34   1        if(staSystem ==KEYIN) {
+  35   2          for(gg = 3; gg <= 7; gg++) {//执行5次
+  36   3            key[gg - 1] = key[gg];
+  37   3          }
+  38   2          key[7] = keyvalue;
+  39   2        }
+  40   1        /*修改密码*/
+  41   1        if(staSystem == SET_KEY) {
+  42   2          if(staSystem ==KEYIN) {
+  43   3            if(addr == 116) addr = 110;
+  44   3            else {
+  45   4              write24c02(addr, keyvalue);
+  46   4              addr++;
+  47   4            }
+  48   3            for(gg = 3; gg <= 7; gg++) {//执行5次
+  49   4              key[gg - 1] = key[gg];
+  50   4            }
+  51   3            key[7] = read24c02(addr - 1);
+  52   3          }
+  53   2        }
+  54   1      }
+C51 COMPILER V9.60.0.0   APP                                                               01/26/2021 10:23:04 PAGE 2   
+
+  55          
+  56          void key_2(uchar keyvalue) {
+  57   1        /*输入密码*/
+  58   1        if(staSystem ==KEYIN) {
+  59   2          for(gg = 3; gg <= 7; gg++) {//执行5次
+  60   3            key[gg - 1] = key[gg];
+  61   3          }
+  62   2          key[7] = keyvalue;
+  63   2        }
+  64   1        /*修改密码*/
+  65   1        if(staSystem == SET_KEY) {
+  66   2          if(staSystem ==KEYIN) {
+  67   3            if(addr == 116) addr = 110;
+  68   3            else {
+  69   4              write24c02(addr, keyvalue);
+  70   4              addr++;
+  71   4            }
+  72   3            for(gg = 3; gg <= 7; gg++) {//执行5次
+  73   4              key[gg - 1] = key[gg];
+  74   4            }
+  75   3            key[7] = read24c02(addr - 1);
+  76   3          }
+  77   2        }
+  78   1      }
+  79          
+  80          void key_3(uchar keyvalue) {
+  81   1        /*输入密码*/
+  82   1        if(staSystem ==KEYIN) {
+  83   2          for(gg = 3; gg <= 7; gg++) {//执行5次
+  84   3            key[gg - 1] = key[gg];
+  85   3          }
+  86   2          key[7] = keyvalue;
+  87   2        }
+  88   1        /*修改密码*/
+  89   1        if(staSystem == SET_KEY) {
+  90   2          if(staSystem ==KEYIN) {
+  91   3            if(addr == 116) addr = 110;
+  92   3            else {
+  93   4              write24c02(addr, keyvalue);
+  94   4              addr++;
+  95   4            }
+  96   3            for(gg = 3; gg <= 7; gg++) {//执行5次
+  97   4              key[gg - 1] = key[gg];
+  98   4            }
+  99   3            key[7] = read24c02(addr - 1);
+ 100   3          }
+ 101   2        }
+ 102   1      }
+ 103          
+ 104          void key_4(uchar keyvalue) {
+ 105   1        /*输入密码*/
+ 106   1        if(staSystem ==KEYIN) {
+ 107   2          for(gg = 3; gg <= 7; gg++) {//执行5次
+ 108   3            key[gg - 1] = key[gg];
+ 109   3          }
+ 110   2          key[7] = keyvalue;
+ 111   2        }
+ 112   1        /*修改密码*/
+ 113   1        if(staSystem == SET_KEY) {
+ 114   2          if(staSystem ==KEYIN) {
+ 115   3            if(addr == 116) addr = 110;
+ 116   3            else {
+C51 COMPILER V9.60.0.0   APP                                                               01/26/2021 10:23:04 PAGE 3   
+
+ 117   4              write24c02(addr, keyvalue);
+ 118   4              addr++;
+ 119   4            }
+ 120   3            for(gg = 3; gg <= 7; gg++) {//执行5次
+ 121   4              key[gg - 1] = key[gg];
+ 122   4            }
+ 123   3            key[7] = read24c02(addr - 1);
+ 124   3          }
+ 125   2        }
+ 126   1      }
+ 127          
+ 128          void key_5(uchar keyvalue) {
+ 129   1        /*输入密码*/
+ 130   1        if(staSystem ==KEYIN) {
+ 131   2          for(gg = 3; gg <= 7; gg++) {//执行5次
+ 132   3            key[gg - 1] = key[gg];
+ 133   3          }
+ 134   2          key[7] = keyvalue;
+ 135   2        }
+ 136   1        /*修改密码*/
+ 137   1        if(staSystem == SET_KEY) {
+ 138   2          if(staSystem ==KEYIN) {
+ 139   3            if(addr == 116) addr = 110;
+ 140   3            else {
+ 141   4              write24c02(addr, keyvalue);
+ 142   4              addr++;
+ 143   4            }
+ 144   3            for(gg = 3; gg <= 7; gg++) {//执行5次
+ 145   4              key[gg - 1] = key[gg];
+ 146   4            }
+ 147   3            key[7] = read24c02(addr - 1);
+ 148   3          }
+ 149   2        }
+ 150   1      }
+ 151          void key_6(uchar keyvalue) {
+ 152   1        /*输入密码*/
+ 153   1        if(staSystem ==KEYIN) {
+ 154   2          for(gg = 3; gg <= 7; gg++) {//执行5次
+ 155   3            key[gg - 1] = key[gg];
+ 156   3          }
+ 157   2          key[7] = keyvalue;
+ 158   2        }
+ 159   1        /*修改密码*/
+ 160   1        if(staSystem == SET_KEY) {
+ 161   2          if(staSystem ==KEYIN) {
+ 162   3            if(addr == 116) addr = 110;
+ 163   3            else {
+ 164   4              write24c02(addr, keyvalue);
+ 165   4              addr++;
+ 166   4            }
+ 167   3            for(gg = 3; gg <= 7; gg++) {//执行5次
+ 168   4              key[gg - 1] = key[gg];
+ 169   4            }
+ 170   3            key[7] = read24c02(addr - 1);
+ 171   3          }
+ 172   2        }
+ 173   1      }
+ 174          
+ 175          void key_7(uchar keyvalue) {
+ 176   1        /*输入密码*/
+ 177   1        if(staSystem ==KEYIN) {
+ 178   2          for(gg = 3; gg <= 7; gg++) {//执行5次
+C51 COMPILER V9.60.0.0   APP                                                               01/26/2021 10:23:04 PAGE 4   
+
+ 179   3            key[gg - 1] = key[gg];
+ 180   3          }
+ 181   2          key[7] = keyvalue;
+ 182   2        }
+ 183   1        /*修改密码*/
+ 184   1        if(staSystem == SET_KEY) {
+ 185   2          if(staSystem ==KEYIN) {
+ 186   3            if(addr == 116) addr = 110;
+ 187   3            else {
+ 188   4              write24c02(addr, keyvalue);
+ 189   4              addr++;
+ 190   4            }
+ 191   3            for(gg = 3; gg <= 7; gg++) {//执行5次
+ 192   4              key[gg - 1] = key[gg];
+ 193   4            }
+ 194   3            key[7] = read24c02(addr - 1);
+ 195   3          }
+ 196   2        }
+ 197   1      }
+ 198          
+ 199          void key_8(uchar keyvalue) {
+ 200   1        /*输入密码*/
+ 201   1        if(staSystem ==KEYIN) {
+ 202   2          for(gg = 3; gg <= 7; gg++) {//执行5次
+ 203   3            key[gg - 1] = key[gg];
+ 204   3          }
+ 205   2          key[7] = keyvalue;
+ 206   2        }
+ 207   1        /*修改密码*/
+ 208   1        if(staSystem == SET_KEY) {
+ 209   2          if(staSystem ==KEYIN) {
+ 210   3            if(addr == 116) addr = 110;
+ 211   3            else {
+ 212   4              write24c02(addr, keyvalue);
+ 213   4              addr++;
+ 214   4            }
+ 215   3            for(gg = 3; gg <= 7; gg++) {//执行5次
+ 216   4              key[gg - 1] = key[gg];
+ 217   4            }
+ 218   3            key[7] = read24c02(addr - 1);
+ 219   3          }
+ 220   2        }
+ 221   1      }
+ 222          
+ 223          void key_9(uchar keyvalue) {
+ 224   1        /*输入密码*/
+ 225   1        if(staSystem ==KEYIN) {
+ 226   2          for(gg = 3; gg <= 7; gg++) {//执行5次
+ 227   3            key[gg - 1] = key[gg];
+ 228   3          }
+ 229   2          key[7] = keyvalue;
+ 230   2        }
+ 231   1        /*修改密码*/
+ 232   1        if(staSystem == SET_KEY) {
+ 233   2          if(staSystem ==KEYIN) {
+ 234   3            if(addr == 116) addr = 110;
+ 235   3            else {
+ 236   4              write24c02(addr, keyvalue);
+ 237   4              addr++;
+ 238   4            }
+ 239   3            for(gg = 3; gg <= 7; gg++) {//执行5次
+ 240   4              key[gg - 1] = key[gg];
+C51 COMPILER V9.60.0.0   APP                                                               01/26/2021 10:23:04 PAGE 5   
+
+ 241   4            }
+ 242   3            key[7] = read24c02(addr - 1);
+ 243   3          }
+ 244   2        }
+ 245   1      }
+ 246          
+ 247          
+ 248          
+ 249          
+ 250          
+ 251          
+ 252          /*功能键*/
+ 253          
+ 254          void key_10() {
+ 255   1        
+ 256   1      }
+ 257          void key_11() {
+ 258   1        
+ 259   1      }
+ 260          
+ 261          void key_12() {
+ 262   1        
+ 263   1      }
+ 264          
+ 265          void key_13() {
+ 266   1        
+ 267   1      }
+ 268          
+ 269          void key_14() {
+ 270   1        
+ 271   1      }
+ 272          
+ 273          void key_15() {
+ 274   1        if(staSystem == NOMAL) {
+ 275   2          staSystem = KEYIN;
+ 276   2        }
+ 277   1      }
+ 278          
+ 279          
+ 280          
+ 281          void KeyAction(uchar keyvalue) {
+ 282   1        switch (keyvalue)
+ 283   1        {
+ 284   2          case 0: key_0(keyvalue); break;
+ 285   2          case 1: key_1(keyvalue); break; 
+ 286   2          case 2: key_2(keyvalue); break; 
+ 287   2          case 3: key_3(keyvalue); break;
+ 288   2          case 4: key_4(keyvalue); break;
+ 289   2          case 5: key_5(keyvalue); break;
+ 290   2          case 6: key_6(keyvalue); break;
+ 291   2          case 7: key_7(keyvalue); break;
+ 292   2          case 8: key_8(keyvalue); break;
+ 293   2          case 9: key_9(keyvalue); break;
+ 294   2          case 10: key_10(); break;
+ 295   2          case 11: key_11(); break;
+ 296   2          case 12: key_12(); break;
+ 297   2          case 13: key_13(); break;
+ 298   2          case 14: key_14(); break;
+ 299   2          case 15: key_15(); break;   
+ 300   2          default: break;
+ 301   2        }
+ 302   1      }
+C51 COMPILER V9.60.0.0   APP                                                               01/26/2021 10:23:04 PAGE 6   
+
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =   1912    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      1       1
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

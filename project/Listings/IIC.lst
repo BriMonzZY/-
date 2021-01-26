@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   IIC                                                               01/25/2021 22:55:07 PAGE 1   
+C51 COMPILER V9.60.0.0   IIC                                                               01/26/2021 10:23:03 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE IIC
@@ -62,7 +62,7 @@ line level    source
   52   1         {
   53   2           temp=temp<<1;
   54   2           scl=0;
-C51 COMPILER V9.60.0.0   IIC                                                               01/25/2021 22:55:07 PAGE 2   
+C51 COMPILER V9.60.0.0   IIC                                                               01/26/2021 10:23:03 PAGE 2   
 
   55   2           nop();
   56   2           sda=CY;    //temp左移时，移出的值放入了CY中
@@ -126,7 +126,7 @@ line level    source
  114          //////向24c02的address地址中写入一字节数据info/////
  115          void write24c02(unsigned char address,unsigned char info)
  116          {
-C51 COMPILER V9.60.0.0   IIC                                                               01/25/2021 22:55:07 PAGE 3   
+C51 COMPILER V9.60.0.0   IIC                                                               01/26/2021 10:23:03 PAGE 3   
 
  117   1         start();
  118   1         writebyte(0xa0);

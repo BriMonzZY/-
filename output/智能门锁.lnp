@@ -1,6 +1,8 @@
 "..\output\main.obj",
 "..\output\key.obj",
 "..\output\smg.obj",
-"..\output\IIC.obj" 
+"..\output\IIC.obj",
+"..\output\led.obj",
+"..\output\app.obj" 
 TO "..\output\智能门锁" 
 PRINT(".\Listings\智能门锁.m51") RAMSIZE(256) 

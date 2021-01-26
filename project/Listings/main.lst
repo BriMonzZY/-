@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   MAIN                                                              01/25/2021 22:55:07 PAGE 1   
+C51 COMPILER V9.60.0.0   MAIN                                                              01/26/2021 10:23:03 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
@@ -8,98 +8,150 @@ COMPILER INVOKED BY: D:\app\keil\C51\BIN\C51.EXE ..\files\main.c LARGE OPTIMIZE(
 
 line level    source
 
-   1          
+   1          /*
    2          
-   3          #include "config.h"
-   4          #include "key.h"
-   5          #include "smg.h"
-   6          #include "IIC.h"
+   3          0     1     2     3
+   4          4     5     6     7
+   5          8     9    无     无
+   6          无   清除  修改  输入
    7          
-   8          
+   8          */
    9          
-  10          uchar key[8] = {15, 15, 0, 0, 0, 0, 0, 0};//显示
-  11          //            最左面                最右面
-  12          
-  13          uchar oldkey[6] = {8, 8, 8, 8, 8, 8};//存储修改的密码以及原始密码
-  14          
-  15          
-  16          
-  17          
+  10          #define _MAIN_C
+  11          #include "config.h"
+  12          #include "key.h"
+  13          #include "smg.h"
+  14          #include "IIC.h"
+  15          #include "main.h"
+  16          #include "led.h"
+  17          #include "app.h"
   18          
-  19          void main()
-  20          {
-  21   1        //uchar addr = 110;//先存最高位
-  22   1        //bit judge = 1;//判断密码是否正确(为1时)
-  23   1        uchar backup[4][4] = { //初始化按键值备份
-  24   1            {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}};
-  25   1        uchar b;
-  26   1        
-  27   1        
-  28   1      
-  29   1      
-  30   1        timer0Init();
-  31   1        while(1){//循环检测 4*4 的矩阵按键
-  32   2          b = keydriver();
-  33   2          key[7] = b;
-  34   2        }
-  35   1      
-  36   1        
-  37   1      }
-  38          
-  39          
-  40          
-  41          
-  42          
-  43          /*清空eeprom程序，暂时使用*/
-  44          //if(keyvalue == 15) {
-  45          //  
-  46          //  write24c02(110, 0);
-  47          //  write24c02(111, 0);
-  48          //  write24c02(112, 0);
-  49          //  write24c02(113, 0);
-  50          //  write24c02(114, 0);
-  51          //  write24c02(115, 0);
-  52          //}
-  53          
-  54          //if(addr == 116) addr = 110;
-C51 COMPILER V9.60.0.0   MAIN                                                              01/25/2021 22:55:07 PAGE 2   
+  19          
+  20          
+  21          uchar key[8] = {15, 15, 0, 0, 0, 0, 0, 0};//显示
+  22          //            最左面                最右面
+  23          
+  24          uchar oldkey[6] = {8, 8, 8, 8, 8, 8};//存储修改的密码以及原始密码要在程序起始将eeprom中的数值赋值到这
+  25          
+  26          
+  27          uchar backup[4][4] = { //初始化按键值备份
+  28                {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}};
+  29          
+  30          enum estaSystem staSystem = NOMAL;    //设置初始状态staSystem为NOMAL  
+  31          uchar addr = 110;//先存最高位
+  32          
+  33                
+  34          
+  35          
+  36          void delay2s(void)   //误差 -0.000000000045us
+  37          {
+  38   1          unsigned char a,b,c;
+  39   1          for(c=131;c>0;c--)
+  40   1              for(b=156;b>0;b--)
+  41   1                  for(a=3;a>0;a--);
+  42   1      }
+  43          
+  44          
+  45                
+  46          void main()
+  47          {
+  48   1        timer0Init();
+  49   1        while(1){//循环检测 4*4 的矩阵按键
+  50   2          keydriver();
+  51   2          
+  52   2          if(staSystem == NOMAL) {
+  53   3            key[0] = 14; key[1] = 14; key[2] = 14; key[3] = 14; key[4] = 14; key[5] = 14; key[6] = 14; key[7] = 14;
+  54   3          }
+C51 COMPILER V9.60.0.0   MAIN                                                              01/26/2021 10:23:03 PAGE 2   
 
-  55          //else {
-  56          //  write24c02(addr, keyvalue);
-  57          //  addr++;
-  58          //}
-  59          
-  60          
-  61          
-  62          //for(gg = 3; gg <= 7; gg++) {//执行5次
-  63          //  key[gg - 1] = key[gg];
-  64          //}
-  65          //key[7] = read24c02(addr - 1);
-  66                              
-  67                              
-  68                              
-  69          
-  70          
-  71          /*定时器中断0服务函数，处理数码管扫描，以及按键扫描*/
-  72          void timer0() interrupt 1
-  73          {
-  74   1        static uchar flags;
-  75   1        TH0 = 0xfc; //重新加载初值1ms
-  76   1        TL0 = 0x66;
-  77   1        /*数码管*/  
-  78   1        flags++;
-  79   1        if(flags == 2) {
-  80   2          flags = 0;
-  81   2          display(key[0], key[1], key[2], key[3], key[4], key[5], key[6], key[7]);
-  82   2        }
-  83   1        keyscan();
-  84   1      }
+  55   2          
+  56   2          if(staSystem == OPEN) {//当系统状态为打开时
+  57   3            key[0] = 10; key[1] = 14; key[2] = 14; key[3] = 14; key[4] = 10; key[5] = 11; key[6] = 12; key[7] = 13;
+  58   3            delay2s();
+  59   3            staSystem = NOMAL;
+  60   3          }
+  61   2          
+  62   2          if(staSystem == KEYIN) {//输入状态判断密码是否正确  注意潜在bug(切换模式时key数组的值)
+  63   3            uchar judge = 0x00;
+  64   3            uchar i;
+  65   3            for(i = 0; i < 6; i++) {
+  66   4              judge <<= 1;
+  67   4              if(key[i + 2] == oldkey[i]) judge |= 0x01;
+  68   4              else judge |= 0x00;
+  69   4            }
+  70   3            if(judge == 0x3f) staSystem = OPEN;//密码正确设置系统状态为OPEN
+  71   3          }//if(staSystem == KEYIN)
+  72   2          
+  73   2        } 
+  74   1      }
+  75          
+  76          
+  77          
+  78          
+  79          
+  80            //bit judge = 1;//判断密码是否正确(为1时)
+  81          /*清空eeprom程序，暂时使用*/
+  82          //if(keyvalue == 15) {
+  83          //  
+  84          //  write24c02(110, 0);
+  85          //  write24c02(111, 0);
+  86          //  write24c02(112, 0);
+  87          //  write24c02(113, 0);
+  88          //  write24c02(114, 0);
+  89          //  write24c02(115, 0);
+  90          //}
+  91          
+  92          //if(addr == 116) addr = 110;
+  93          //else {
+  94          //  write24c02(addr, keyvalue);
+  95          //  addr++;
+  96          //}
+  97          
+  98          
+  99          
+ 100          //for(gg = 3; gg <= 7; gg++) {//执行5次
+ 101          //  key[gg - 1] = key[gg];
+ 102          //}
+ 103          //key[7] = read24c02(addr - 1);
+ 104            
+ 105          /*
+ 106          if(staSystem ==KEYIN) {
+ 107              if(addr == 116) addr = 110;
+ 108              else {
+ 109                write24c02(addr, keyvalue);
+ 110                addr++;
+ 111              }
+ 112              for(gg = 3; gg <= 7; gg++) {//执行5次
+ 113                key[gg - 1] = key[gg];
+ 114              }
+ 115              key[7] = read24c02(addr - 1);
+ 116            }
+C51 COMPILER V9.60.0.0   MAIN                                                              01/26/2021 10:23:03 PAGE 3   
+
+ 117          */                    
+ 118                              
+ 119          
+ 120          
+ 121          /*定时器中断0服务函数，处理数码管扫描，以及按键扫描*/
+ 122          void timer0() interrupt 1
+ 123          {
+ 124   1        static uchar flags;
+ 125   1        TH0 = 0xfc; //重新加载初值1ms
+ 126   1        TL0 = 0x66;
+ 127   1        /*数码管*/  
+ 128   1        flags++;
+ 129   1        if(flags == 2) {
+ 130   2          flags = 0;
+ 131   2          display(key[0], key[1], key[2], key[3], key[4], key[5], key[6], key[7]);
+ 132   2        }
+ 133   1        keyscan();
+ 134   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    161    ----
-   CONSTANT SIZE    =     16    ----
-   XDATA SIZE       =     15      16
+   CODE SIZE        =    350    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =     33       2
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

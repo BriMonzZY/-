@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   SMG                                                               01/25/2021 22:55:07 PAGE 1   
+C51 COMPILER V9.60.0.0   SMG                                                               01/26/2021 10:23:03 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE SMG
@@ -10,84 +10,85 @@ line level    source
 
    1          #include "config.h"
    2          #include "smg.h"
-   3                                                                                            //10    11   12    13     14     15
-   4                                                                                            //O     P     e     n     熄灭   -
-   5          uchar code SMGduan[]= {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F, 0x3f, 0x73, 0x7b, 0x37,
+   3          #include "main.h"
+   4                                                                                            //10    11   12    13     14     15
+   5                                                                                            //O     P     e     n     熄灭   -
+   6          uchar code SMGduan[]= {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F, 0x3f, 0x73, 0x7b, 0x37,
              - 0x00, 0x40};
-   6          uchar code SMGwei[] = {0xFE, 0xFD, 0xFB, 0xF7, 0xEF, 0xDF, 0xBF, 0x7F};
-   7          
+   7          uchar code SMGwei[] = {0xFE, 0xFD, 0xFB, 0xF7, 0xEF, 0xDF, 0xBF, 0x7F};
    8          
-   9          void delay200us(void)   //误差 -0.347222222222us
-  10          {
-  11   1          unsigned char a,b;
-  12   1          for(b=1;b>0;b--)
-  13   1              for(a=89;a>0;a--);
-  14   1      }
-  15          
+   9          
+  10          void delay200us(void)   //误差 -0.347222222222us
+  11          {
+  12   1          unsigned char a,b;
+  13   1          for(b=1;b>0;b--)
+  14   1              for(a=89;a>0;a--);
+  15   1      }
   16          
-  17          void delay500us(void)   //误差 -0.868055555556us
-  18          {
-  19   1          unsigned char a,b;
-  20   1          for(b=1;b>0;b--)
-  21   1              for(a=227;a>0;a--);
-  22   1      }
-  23          
+  17          
+  18          void delay500us(void)   //误差 -0.868055555556us
+  19          {
+  20   1          unsigned char a,b;
+  21   1          for(b=1;b>0;b--)
+  22   1              for(a=227;a>0;a--);
+  23   1      }
   24          
-  25          void delay50us(void)   //误差 -0.086805555556us
-  26          {
-  27   1          unsigned char a,b;
-  28   1          for(b=1;b>0;b--)
-  29   1              for(a=20;a>0;a--);
-  30   1      }
-  31          
+  25          
+  26          void delay50us(void)   //误差 -0.086805555556us
+  27          {
+  28   1          unsigned char a,b;
+  29   1          for(b=1;b>0;b--)
+  30   1              for(a=20;a>0;a--);
+  31   1      }
   32          
   33          
-  34          /*三位数码管显示函数*/
-  35          void display(uchar a, uchar b, uchar c, uchar d, uchar e, uchar f, uchar g, uchar h)
-  36          {
-  37   1        static uchar wei; 
-  38   1        P0 = 0Xff;
-  39   1        WE = 1;
-  40   1        P0 = SMGwei[wei];
-  41   1        WE = 0;
-  42   1        switch(wei)
-  43   1        {
-  44   2          case 0: DU = 1; P0 = SMGduan[a]; DU = 0; break;
-  45   2          case 1: DU = 1; P0 = SMGduan[b]; DU = 0; break;    
-  46   2          case 2: DU = 1; P0 = SMGduan[c]; DU = 0; break; 
-  47   2          case 3: DU = 1; P0 = SMGduan[d]; DU = 0; break; 
-  48   2          case 4: DU = 1; P0 = SMGduan[e]; DU = 0; break; 
-  49   2          case 5: DU = 1; P0 = SMGduan[f]; DU = 0; break; 
-  50   2          case 6: DU = 1; P0 = SMGduan[g]; DU = 0; break; 
-  51   2          case 7: DU = 1; P0 = SMGduan[h]; DU = 0; break; //个位
-  52   2        }
-  53   1        wei++;
-C51 COMPILER V9.60.0.0   SMG                                                               01/25/2021 22:55:07 PAGE 2   
+  34          
+  35          /*三位数码管显示函数*/
+  36          void display(uchar a, uchar b, uchar c, uchar d, uchar e, uchar f, uchar g, uchar h)
+  37          {
+  38   1        static uchar wei; 
+  39   1        P0 = 0Xff;
+  40   1        WE = 1;
+  41   1        P0 = SMGwei[wei];
+  42   1        WE = 0;
+  43   1        switch(wei)
+  44   1        {
+  45   2          case 0: DU = 1; P0 = SMGduan[a]; DU = 0; break;
+  46   2          case 1: DU = 1; P0 = SMGduan[b]; DU = 0; break;    
+  47   2          case 2: DU = 1; P0 = SMGduan[c]; DU = 0; break; 
+  48   2          case 3: DU = 1; P0 = SMGduan[d]; DU = 0; break; 
+  49   2          case 4: DU = 1; P0 = SMGduan[e]; DU = 0; break; 
+  50   2          case 5: DU = 1; P0 = SMGduan[f]; DU = 0; break; 
+  51   2          case 6: DU = 1; P0 = SMGduan[g]; DU = 0; break; 
+  52   2          case 7: DU = 1; P0 = SMGduan[h]; DU = 0; break; //个位
+  53   2        }
+C51 COMPILER V9.60.0.0   SMG                                                               01/26/2021 10:23:03 PAGE 2   
 
-  54   1        if(wei == 8) {
-  55   2            wei = 0;
-  56   2        }
-  57   1      }
-  58          
+  54   1        wei++;
+  55   1        if(wei == 8) {
+  56   2            wei = 0;
+  57   2        }
+  58   1      }
   59          
   60          
-  61          //void display(uint i)
-  62          //{
-  63          //    static uchar wei;         
-  64          //    P0 = 0xff;
-  65          //    WE = 1;
-  66          //    P0 = SMGwei[wei];
-  67          //    WE = 0;
-  68          //    switch(wei)
-  69          //    {
-  70          //        case 0: DU = 1; P0 = SMGduan[i / 100]; DU = 0; break;
-  71          //        case 1: DU = 1; P0 = SMGduan[i % 100 / 10]; DU = 0; break;    
-  72          //        case 2: DU = 1; P0 = SMGduan[i % 10]; DU = 0; break;        
-  73          //    }
-  74          //    wei++;
-  75          //    if(wei == 3)
-  76          //        wei = 0;
-  77          //}
+  61          
+  62          //void display(uint i)
+  63          //{
+  64          //    static uchar wei;         
+  65          //    P0 = 0xff;
+  66          //    WE = 1;
+  67          //    P0 = SMGwei[wei];
+  68          //    WE = 0;
+  69          //    switch(wei)
+  70          //    {
+  71          //        case 0: DU = 1; P0 = SMGduan[i / 100]; DU = 0; break;
+  72          //        case 1: DU = 1; P0 = SMGduan[i % 100 / 10]; DU = 0; break;    
+  73          //        case 2: DU = 1; P0 = SMGduan[i % 10]; DU = 0; break;        
+  74          //    }
+  75          //    wei++;
+  76          //    if(wei == 3)
+  77          //        wei = 0;
+  78          //}
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

@@ -1,7 +1,8 @@
 #include "config.h"
 #include "key.h"
 #include "smg.h"
-
+#include "main.h"
+#include "app.h"
 
 uchar KeySta[4][4] = { //全部矩阵按键的当前状态
     {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}, {1, 1, 1, 1}
@@ -20,24 +21,19 @@ void timer0Init()
     TR0 = 1; //启动 T0
 }
 
-uchar keydriver() {
-	
-	uchar backup[4][4];
-	uchar i, j, gg;
-	
-	
+void keydriver() { 
+	uchar i, j, gg;//循环变量
 	for (i=0; i<4; i++){
 		for (j=0; j<4; j++){
 				if (backup[i][j] != KeySta[i][j]){//检测按键动作
 					if (backup[i][j] != 0){ //
 						keyvalue = i * 4 + j;
-						
+						KeyAction(keyvalue);
 					}//if (backup[i][j] != 0) 按键按下时执行动作
 					backup[i][j] = KeySta[i][j]; //更新前一次的备份值
 				}
 		}
 	}
-	return keyvalue;
 }
 
 
