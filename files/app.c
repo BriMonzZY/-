@@ -254,7 +254,7 @@ void key_12() {
 void key_13() {//Çå³ý
 	if(staSystem == KEYIN) {
 		uchar i;
-		
+		key_in_judge--;
 		for(i = 6; i >= 2; i--) {
 			key[i + 1] = key[i];
 		}
@@ -266,7 +266,7 @@ void key_14() {//ÐÞ¸Ä
 	if(staSystem == SET_KEY) {
 		staSystem = OPEN;
 	}
-	if(staSystem == OPEN) {
+	else if(staSystem == OPEN) {
 		staSystem = SET_KEY;
 	}
 	

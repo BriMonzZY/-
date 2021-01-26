@@ -57,18 +57,23 @@ void main()
 	write24c02(115, 8);
 	*/
 	
-	oldkey[0] = read24c02(110);
-	oldkey[1] = read24c02(111);
-	oldkey[2] = read24c02(112);
-	oldkey[3] = read24c02(113);
-	oldkey[4] = read24c02(114);
-	oldkey[5] = read24c02(115);
-	
-	delay();
+	delay();//上电延迟，防止数码管显示乱码
 	timer0Init();//1ms
 	timer1Init();//5ms
-	while(1){//循环检测 4*4 的矩阵按键
-		keydriver();
+	while(1){
+		
+		oldkey[0] = read24c02(110);
+		oldkey[1] = read24c02(111);
+		oldkey[2] = read24c02(112);
+		oldkey[3] = read24c02(113);
+		oldkey[4] = read24c02(114);
+		oldkey[5] = read24c02(115);
+		
+		
+		keydriver();//循环检测 4*4 的矩阵按键
+		
+		if(staSystem != KEYIN) L7 = 1;
+		if(staSystem != SET_KEY) L8 = 1;
 		
 		if(staSystem == NOMAL) {
 			key[0] = 14; key[1] = 14; key[2] = 14; key[3] = 14; key[4] = 14; key[5] = 14; key[6] = 14; key[7] = 14;
@@ -83,72 +88,35 @@ void main()
 			uchar judge = 0x00;
 			uchar i;
 			key[0] = 15;
+			L7 = 0;
 			//key_in_judge = 0;//初始化按键次数判断位
 			for(i = 0; i < 6; i++) {
 				judge <<= 1;
 				if(key[i + 2] == oldkey[i]) judge |= 0x01;
 				else judge |= 0x00;
 			}
-			if(judge == 0x3f) staSystem = OPEN;//密码正确设置系统状态为OPEN
+			if(judge == 0x3f)  {
+				staSystem = OPEN;//密码正确设置系统状态为OPEN
+				key_in_judge = 0;
+			}
 			else if(judge != 0x3f && key_in_judge == 6) {
 				staSystem = NOMAL;
+				key[0] = 14; key[1] = 14; key[2] = 14; key[3] = 14; key[4] = 14; key[5] = 14; key[6] = 14; key[7] = 14;
 				key_in_judge = 0;
+				key_error();
 			}
 		}//if(staSystem == KEYIN)
 		
 		if(staSystem == SET_KEY) {
+			L8 = 0;
 			if(set_key_one) {//保证出现一次，不影响后面的密码输入
 				key[0] = 16; key[1] = 14; key[2] = 14; key[3] = 14; key[4] = 14; key[5] = 14; key[6] = 14; key[7] = 14;
 				set_key_one = 0;
+				
 			}
 		}//if(staSystem == SET_KEY)
 	}	
 }
-
-
-
-
-
-	//bit judge = 1;//判断密码是否正确(为1时)
-/*清空eeprom程序，暂时使用*/
-//if(keyvalue == 15) {
-//	
-//	write24c02(110, 0);
-//	write24c02(111, 0);
-//	write24c02(112, 0);
-//	write24c02(113, 0);
-//	write24c02(114, 0);
-//	write24c02(115, 0);
-//}
-
-//if(addr == 116) addr = 110;
-//else {
-//	write24c02(addr, keyvalue);
-//	addr++;
-//}
-
-
-
-//for(gg = 3; gg <= 7; gg++) {//执行5次
-//	key[gg - 1] = key[gg];
-//}
-//key[7] = read24c02(addr - 1);
-	
-/*
-if(staSystem ==KEYIN) {
-		if(addr == 116) addr = 110;
-		else {
-			write24c02(addr, keyvalue);
-			addr++;
-		}
-		for(gg = 3; gg <= 7; gg++) {//执行5次
-			key[gg - 1] = key[gg];
-		}
-		key[7] = read24c02(addr - 1);
-	}
-*/										
-										
-
 
 /*定时器中断0服务函数，处理数码管扫描，以及按键扫描*/
 void timer0() interrupt 1

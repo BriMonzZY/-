@@ -1,4 +1,4 @@
-C51 COMPILER V9.60.0.0   MAIN                                                              01/26/2021 11:39:09 PAGE 1   
+C51 COMPILER V9.60.0.0   MAIN                                                              01/26/2021 12:15:29 PAGE 1   
 
 
 C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
@@ -62,147 +62,114 @@ line level    source
   52   1        write24c02(110, 8);
   53   1        write24c02(111, 8);
   54   1        write24c02(112, 8);
-C51 COMPILER V9.60.0.0   MAIN                                                              01/26/2021 11:39:09 PAGE 2   
+C51 COMPILER V9.60.0.0   MAIN                                                              01/26/2021 12:15:29 PAGE 2   
 
   55   1        write24c02(113, 8);
   56   1        write24c02(114, 8);
   57   1        write24c02(115, 8);
   58   1        */
   59   1        
-  60   1        oldkey[0] = read24c02(110);
-  61   1        oldkey[1] = read24c02(111);
-  62   1        oldkey[2] = read24c02(112);
-  63   1        oldkey[3] = read24c02(113);
-  64   1        oldkey[4] = read24c02(114);
-  65   1        oldkey[5] = read24c02(115);
-  66   1        
-  67   1        delay();
-  68   1        timer0Init();//1ms
-  69   1        timer1Init();//5ms
-*** WARNING C206 IN LINE 69 OF ..\files\main.c: 'timer1Init': missing function-prototype
-  70   1        while(1){//循环检测 4*4 的矩阵按键
-  71   2          keydriver();
+  60   1        delay();//上电延迟，防止数码管显示乱码
+  61   1        timer0Init();//1ms
+  62   1        timer1Init();//5ms
+*** WARNING C206 IN LINE 62 OF ..\files\main.c: 'timer1Init': missing function-prototype
+  63   1        while(1){
+  64   2          
+  65   2          oldkey[0] = read24c02(110);
+  66   2          oldkey[1] = read24c02(111);
+  67   2          oldkey[2] = read24c02(112);
+  68   2          oldkey[3] = read24c02(113);
+  69   2          oldkey[4] = read24c02(114);
+  70   2          oldkey[5] = read24c02(115);
+  71   2          
   72   2          
-  73   2          if(staSystem == NOMAL) {
-  74   3            key[0] = 14; key[1] = 14; key[2] = 14; key[3] = 14; key[4] = 14; key[5] = 14; key[6] = 14; key[7] = 14;
-  75   3          }
-  76   2          
-  77   2          if(staSystem == OPEN) {//当系统状态为打开时
-  78   3            key[0] = 10; key[1] = 14; key[2] = 14; key[3] = 14; key[4] = 10; key[5] = 11; key[6] = 12; key[7] = 13;
-  79   3            set_key_one = 1;
+  73   2          keydriver();//循环检测 4*4 的矩阵按键
+  74   2          
+  75   2          if(staSystem != KEYIN) L7 = 1;
+  76   2          if(staSystem != SET_KEY) L8 = 1;
+  77   2          
+  78   2          if(staSystem == NOMAL) {
+  79   3            key[0] = 14; key[1] = 14; key[2] = 14; key[3] = 14; key[4] = 14; key[5] = 14; key[6] = 14; key[7] = 14;
   80   3          }
   81   2          
-  82   2          if(staSystem == KEYIN) {//输入状态判断密码是否正确  注意潜在bug(切换模式时key数组的值)
-  83   3            uchar judge = 0x00;
-  84   3            uchar i;
-  85   3            key[0] = 15;
-  86   3            //key_in_judge = 0;//初始化按键次数判断位
-  87   3            for(i = 0; i < 6; i++) {
-  88   4              judge <<= 1;
-  89   4              if(key[i + 2] == oldkey[i]) judge |= 0x01;
-  90   4              else judge |= 0x00;
-  91   4            }
-  92   3            if(judge == 0x3f) staSystem = OPEN;//密码正确设置系统状态为OPEN
-  93   3            else if(judge != 0x3f && key_in_judge == 6) {
-  94   4              staSystem = NOMAL;
-  95   4              key_in_judge = 0;
-  96   4            }
-  97   3          }//if(staSystem == KEYIN)
-  98   2          
-  99   2          if(staSystem == SET_KEY) {
- 100   3            if(set_key_one) {//保证出现一次，不影响后面的密码输入
- 101   4              key[0] = 16; key[1] = 14; key[2] = 14; key[3] = 14; key[4] = 14; key[5] = 14; key[6] = 14; key[7] = 14
+  82   2          if(staSystem == OPEN) {//当系统状态为打开时
+  83   3            key[0] = 10; key[1] = 14; key[2] = 14; key[3] = 14; key[4] = 10; key[5] = 11; key[6] = 12; key[7] = 13;
+  84   3            set_key_one = 1;
+  85   3          }
+  86   2          
+  87   2          if(staSystem == KEYIN) {//输入状态判断密码是否正确  注意潜在bug(切换模式时key数组的值)
+  88   3            uchar judge = 0x00;
+  89   3            uchar i;
+  90   3            key[0] = 15;
+  91   3            L7 = 0;
+  92   3            //key_in_judge = 0;//初始化按键次数判断位
+  93   3            for(i = 0; i < 6; i++) {
+  94   4              judge <<= 1;
+  95   4              if(key[i + 2] == oldkey[i]) judge |= 0x01;
+  96   4              else judge |= 0x00;
+  97   4            }
+  98   3            if(judge == 0x3f)  {
+  99   4              staSystem = OPEN;//密码正确设置系统状态为OPEN
+ 100   4              key_in_judge = 0;
+ 101   4            }
+ 102   3            else if(judge != 0x3f && key_in_judge == 6) {
+ 103   4              staSystem = NOMAL;
+ 104   4              key[0] = 14; key[1] = 14; key[2] = 14; key[3] = 14; key[4] = 14; key[5] = 14; key[6] = 14; key[7] = 14
              -;
- 102   4              set_key_one = 0;
- 103   4            }
- 104   3          }//if(staSystem == SET_KEY)
- 105   2        } 
- 106   1      }
- 107          
- 108          
- 109          
- 110          
- 111          
- 112            //bit judge = 1;//判断密码是否正确(为1时)
- 113          /*清空eeprom程序，暂时使用*/
- 114          //if(keyvalue == 15) {
-C51 COMPILER V9.60.0.0   MAIN                                                              01/26/2021 11:39:09 PAGE 3   
+ 105   4              key_in_judge = 0;
+ 106   4              key_error();
+ 107   4            }
+ 108   3          }//if(staSystem == KEYIN)
+ 109   2          
+ 110   2          if(staSystem == SET_KEY) {
+ 111   3            L8 = 0;
+ 112   3            if(set_key_one) {//保证出现一次，不影响后面的密码输入
+ 113   4              key[0] = 16; key[1] = 14; key[2] = 14; key[3] = 14; key[4] = 14; key[5] = 14; key[6] = 14; key[7] = 14
+             -;
+C51 COMPILER V9.60.0.0   MAIN                                                              01/26/2021 12:15:29 PAGE 3   
 
- 115          //  
- 116          //  write24c02(110, 0);
- 117          //  write24c02(111, 0);
- 118          //  write24c02(112, 0);
- 119          //  write24c02(113, 0);
- 120          //  write24c02(114, 0);
- 121          //  write24c02(115, 0);
- 122          //}
- 123          
- 124          //if(addr == 116) addr = 110;
- 125          //else {
- 126          //  write24c02(addr, keyvalue);
- 127          //  addr++;
- 128          //}
- 129          
- 130          
- 131          
- 132          //for(gg = 3; gg <= 7; gg++) {//执行5次
- 133          //  key[gg - 1] = key[gg];
- 134          //}
- 135          //key[7] = read24c02(addr - 1);
- 136            
- 137          /*
- 138          if(staSystem ==KEYIN) {
- 139              if(addr == 116) addr = 110;
- 140              else {
- 141                write24c02(addr, keyvalue);
- 142                addr++;
- 143              }
- 144              for(gg = 3; gg <= 7; gg++) {//执行5次
- 145                key[gg - 1] = key[gg];
- 146              }
- 147              key[7] = read24c02(addr - 1);
- 148            }
- 149          */                    
- 150                              
- 151          
- 152          
- 153          /*定时器中断0服务函数，处理数码管扫描，以及按键扫描*/
- 154          void timer0() interrupt 1
- 155          {
- 156   1        static uchar flags;
- 157   1        TH0 = 0xfc; //重新加载初值1ms
- 158   1        TL0 = 0x66;
- 159   1        /*数码管*/  
- 160   1        flags++;
- 161   1        if(flags == 2) {
- 162   2          flags = 0;
- 163   2          display(key[0], key[1], key[2], key[3], key[4], key[5], key[6], key[7]);
- 164   2        }
- 165   1        keyscan();
- 166   1      }
- 167          
- 168          void timer1() interrupt 3
- 169          {
- 170   1        static uchar flag;
- 171   1        TH1 = 0xee;
- 172   1        TL1 = 0x00; //设置5ms
- 173   1        flag++;
- 174   1        if(flag == 250) {//不知道为什么超不过300,巨大bug
- 175   2          flag = 0;
- 176   2          if(staSystem == OPEN) {
-C51 COMPILER V9.60.0.0   MAIN                                                              01/26/2021 11:39:09 PAGE 4   
-
- 177   3            if(keyjudge == 0) {
- 178   4              staSystem = NOMAL;
- 179   4            }
- 180   3          }
- 181   2          keyjudge = 0;
- 182   2        }
- 183   1      }
+ 114   4              set_key_one = 0;
+ 115   4              
+ 116   4            }
+ 117   3          }//if(staSystem == SET_KEY)
+ 118   2        } 
+ 119   1      }
+ 120          
+ 121          /*定时器中断0服务函数，处理数码管扫描，以及按键扫描*/
+ 122          void timer0() interrupt 1
+ 123          {
+ 124   1        static uchar flags;
+ 125   1        TH0 = 0xfc; //重新加载初值1ms
+ 126   1        TL0 = 0x66;
+ 127   1        /*数码管*/  
+ 128   1        flags++;
+ 129   1        if(flags == 2) {
+ 130   2          flags = 0;
+ 131   2          display(key[0], key[1], key[2], key[3], key[4], key[5], key[6], key[7]);
+ 132   2        }
+ 133   1        keyscan();
+ 134   1      }
+ 135          
+ 136          void timer1() interrupt 3
+ 137          {
+ 138   1        static uchar flag;
+ 139   1        TH1 = 0xee;
+ 140   1        TL1 = 0x00; //设置5ms
+ 141   1        flag++;
+ 142   1        if(flag == 250) {//不知道为什么超不过300,巨大bug
+ 143   2          flag = 0;
+ 144   2          if(staSystem == OPEN) {
+ 145   3            if(keyjudge == 0) {
+ 146   4              staSystem = NOMAL;
+ 147   4            }
+ 148   3          }
+ 149   2          keyjudge = 0;
+ 150   2        }
+ 151   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    514    ----
+   CODE SIZE        =    566    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =     35       2
    PDATA SIZE       =   ----    ----

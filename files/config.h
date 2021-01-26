@@ -47,4 +47,10 @@ sbit WE = P2^7;
 /*IICÒý½Å*/
 sbit sda = P2^0;
 sbit scl = P2^1;
+
+/*LEDÒý½Å*/
+sbit L1 = P1^0;
+sbit L7 = P1^6;
+sbit L8 = P1^7;
+
 #endif
