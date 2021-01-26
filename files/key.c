@@ -21,6 +21,14 @@ void timer0Init()
     TR0 = 1; //启动 T0
 }
 
+void timer1Init() {
+	TMOD |= 0x10;//设置定时器16位定时器
+	TH1 = 0xee;
+	TL1 = 0x00;	//设置5ms
+	ET1 = 1;
+	TR1 = 1;
+}
+
 void keydriver() { 
 	uchar i, j, gg;//循环变量
 	for (i=0; i<4; i++){
